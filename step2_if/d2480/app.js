@@ -10,36 +10,34 @@ let input = fs
   .split(" ")
   .map((v) => +v);
 
-const firstNum = input[0];
-const secondNum = input[1];
-const thirdNum = input[2];
+const [firstNum, secondNum, thirdNum] = [input[0], input[1], input[2]];
 
-if (firstNum === secondNum && secondNum === thirdNum && thirdNum === firstNum) {
-  console.log(`${10000 + firstNum * 1000}`);
-} else if (
-  firstNum === secondNum ||
-  secondNum === thirdNum ||
-  thirdNum === firstNum
-) {
-  if (firstNum === secondNum) {
-    console.log(`${1000 + firstNum * 100}`);
+const answer = (firstNum, secondNum, thirdNum) => {
+  if (firstNum === secondNum && secondNum === thirdNum && thirdNum === firstNum)
+    return console.log(10000 + firstNum * 1000);
+
+  if (
+    firstNum !== secondNum ||
+    secondNum !== thirdNum ||
+    thirdNum !== firstNum
+  ) {
+    if (firstNum === secondNum || firstNum === thirdNum) {
+      return console.log(1000 + firstNum * 100);
+    }
+    if (secondNum === thirdNum) {
+      return console.log(1000 + secondNum * 100);
+    }
   }
-  if (secondNum === thirdNum) {
-    console.log(`${1000 + secondNum * 100}`);
+
+  if (
+    firstNum !== secondNum &&
+    secondNum !== thirdNum &&
+    thirdNum !== firstNum
+  ) {
+    // Passing a comparison function that defines the sort order to the sort method as an argument
+    const sortNum = [firstNum, secondNum, thirdNum].sort((a, b) => b - a);
+    console.log(sortNum[0] * 100);
   }
-  if (thirdNum === firstNum) {
-    console.log(`${1000 + thirdNum * 100}`);
-  }
-} else if (
-  firstNum !== secondNum &&
-  secondNum !== thirdNum &&
-  thirdNum !== firstNum
-) {
-  if (firstNum > secondNum && firstNum > thirdNum) {
-    console.log(`${firstNum * 100}`);
-  } else if (secondNum > firstNum && secondNum > thirdNum) {
-    console.log(`${secondNum * 100}`);
-  } else if (thirdNum > firstNum && thirdNum > secondNum) {
-    console.log(`${thirdNum * 100}`);
-  }
-}
+};
+
+answer(firstNum, secondNum, thirdNum);
