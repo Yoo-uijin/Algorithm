@@ -1,45 +1,21 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const input = fs
-  .readFileSync(file)
-  .toString()
-  .trim()
-  .split(`\n`)
-  .map((i) => i.replace(/\r/g, ""));
-// const fs = require('fs');
-// const input = fs.readFileSync("/dev/stdin").toString().trim().split('\n').map((i) => i.replace(/\r/g, ""));
+const input = fs.readFileSync(file).toString().trim().split(`\n`);
+// const fs = require("fs");
+// const input = fs.readFileSync("/dev/stdin").toString().split("\n");
 
-const string = input[0].split("");
-const length = string.length;
-const M = Number(input[1]);
-const command = input.slice(2);
+let lStack = input[0].split("");
+let rStack = [];
+let len = parseInt(input[1]);
 
-let cursor = string.length;
+for (let i = 2; i < 2 + len; i++) {
+  let [cmd, value] = input[i].split(" ");
+  if (cmd === "L" && lStack.length) rStack.push(lStack.pop());
+  else if (cmd === "D" && rStack.length) lStack.push(rStack.pop());
+  else if (cmd === "B") lStack.pop();
+  else if (cmd === "P") lStack.push(value);
+}
 
-const result = () => {
-  for (let i = 0; i < M; i++) {
-    if (command[i] === "L") {
-      if (cursor !== -1) {
-        cursor -= 1;
-      }
-    } else if (command[i] === "D") {
-      if (cursor !== length) {
-        cursor += 1;
-      }
-    } else if (command[i] === "B") {
-      if (cursor !== -1 && cursor !== 0) {
-        string.splice(cursor - 1, 1);
-        cursor -= 1;
-      }
-    } else if (command[i].includes("P")) {
-      cursor === -1
-        ? string.splice(0, 0, command[i].slice(-1))
-        : string.splice(cursor, 0, command[i].slice(-1));
-
-      cursor += 1;
-    }
-  }
-  console.log(string.join(""));
-};
-
-result();
+let answer = lStack.join("");
+answer += rStack.reverse().join("");
+console.log(answer);
